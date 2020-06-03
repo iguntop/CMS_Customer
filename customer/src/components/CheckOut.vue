@@ -96,8 +96,8 @@ export default {
     },
     checkout () {
       console.log('PENDING ORDER', this.pendingorder)
-      console.log('=======', this.selected.id, this.selected.name)
-      if (this.selected.id !== '' && this.selected.name !== 'default') {
+      console.log('=======', this.selected.id, this.selected.name, this.jmlcart)
+      if (this.selected.name !== undefined && this.selected.name !== 'default' && this.selected.id !== '' && this.jmlcart !== 0) {
         const dt = new Date()
         this.unix = dt.getYear() + dt.getDay() + dt.getMonth() + dt.getHours() + dt.getMinutes() + dt.getSeconds()
         axios({
@@ -160,7 +160,7 @@ export default {
           })
       } else {
         this.$toasted.global.my_app_error({
-          message: 'Address is required'
+          message: 'Address is required / Cart Empty'
         })
       }
     },

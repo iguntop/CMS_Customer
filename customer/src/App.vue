@@ -216,7 +216,9 @@ export default {
         }
       })
         .then(result => {
-          console.log('>>>', result.data)
+          this.$toasted.global.my_app_success({
+            message: 'Welcome to G-Ecommers'
+          })
           localStorage.setItem('token', result.data.token)
           localStorage.setItem('idalamat', result.data.idalamat)
           localStorage.setItem('email', this.email)
@@ -231,6 +233,9 @@ export default {
         .catch(err => {
           this.loginstate = false
           console.log(err)
+          this.$toasted.global.my_app_error({
+            message: 'Username/Password not Found'
+          })
         })
     },
     checkFormValidityRegister () {
