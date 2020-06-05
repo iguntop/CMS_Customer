@@ -1,33 +1,42 @@
 <template>
   <div id="app">
-    <div id="nav" >
-      <nav class="navbar navbar-expand-sm bg-light navbar-light ">
-        <div class="container1">
-          <div class="item">
-            <router-link to="/"><strong>G-Ecommers</strong> </router-link>
-          </div>
-          <div class="item">
-            <div v-if="loginstate === true" class="login">
-              <div class="item besar">
-              <p>{{submittedNames}}</p>
-              </div>
-              <div class="item besar">
-              <router-link to="/checkout">Cart: {{jmlcart}} </router-link>
-              </div>
-              <div class="item">
-              <button @click.prevent="logout">logout</button>
-              </div>
-            </div>
-            <div v-else class="login">
-            <button v-b-modal.modal-login>Login</button>
-            <button v-b-modal.modal-register>register</button>
-            <!-- <button @click.prevent="handleClickSignIn">login with Gmail</button> -->
-            </div>
+    <div>
+  <b-navbar toggleable="lg" type="dark" variant="info">
+    <b-navbar-brand><strong>G-Ecommers</strong></b-navbar-brand>
 
+    <b-navbar-toggle target="nav-collapse"></b-navbar-toggle>
+
+    <b-collapse id="nav-collapse" is-nav>
+      <!-- Right aligned nav items -->
+      <b-navbar-nav class="ml-auto">
+        <b-nav-form>
+          <b-form-input size="sm" class="mr-sm-2" placeholder="Search" v-model="productname"></b-form-input>
+          <b-button size="sm" class="my-2 my-sm-0" @click.prevent="searchProductbyname(productname)">Search</b-button>
+        </b-nav-form>
+        <div v-if="loginstate === true" class="login" >
+           <b-nav-item @click.prevent="checkout">Cart: {{jmlcart}}</b-nav-item>
+        </div>
+        <div v-if="loginstate === true" class="login">
+          <b-nav-item-dropdown right>
+            <!-- Using 'button-content' slot -->
+            <template v-slot:button-content>
+              <em>{{submittedNames}}</em>
+            </template>
+            <b-dropdown-item @click.prevent="logout">Log Out</b-dropdown-item>
+          </b-nav-item-dropdown>
+        </div>
+        <div v-else>
+          <div>
+          <b-nav-item v-b-modal.modal-login>Login</b-nav-item>
           </div>
         </div>
-      </nav>
-    </div>
+        <div v-if="loginstate === false">
+          <b-nav-item v-b-modal.modal-register>register</b-nav-item>
+          </div>
+      </b-navbar-nav>
+    </b-collapse>
+  </b-navbar>
+</div>
     <div>
     <!-- <div class="mt-3">
       Login
@@ -148,14 +157,15 @@ export default {
       repassword: '',
       repasswordState: null,
       submittedNames: '',
-      loginstate: false
+      loginstate: false,
+      productname: ''
     }
   },
   computed: {
     ...mapState(['pendingorder', 'jmlcart'])
   },
   methods: {
-    ...mapActions(['fetchPending', 'fetchJmlCart']),
+    ...mapActions(['fetchPending', 'fetchJmlCart', 'fetchProductbyname']),
     ...mapMutations(['SET_PENDING']),
     handleClickSignIn () {
       this.$gAuth
@@ -183,6 +193,12 @@ export default {
       this.SET_PENDING([])
       localStorage.clear()
       this.$router.push('/')
+    },
+    checkout () {
+      this.$router.push('/checkout')
+    },
+    searchProductbyname (name) {
+      this.fetchProductbyname(name)
     },
     checkFormValidityLogin () {
       const valid = this.$refs.form.checkValidity()

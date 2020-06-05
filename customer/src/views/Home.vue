@@ -49,6 +49,7 @@ export default {
 </script>
 <style >
 .container {
-  display :flex
+  display :flex;
+  padding: 10px;
 }
 </style>

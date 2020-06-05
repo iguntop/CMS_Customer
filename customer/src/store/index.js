@@ -47,6 +47,21 @@ export default new Vuex.Store({
           })
       })
     },
+    fetchProductbyname (context, findname) {
+      axios({
+        method: 'GET',
+        url: '/product/customer/all'
+      })
+        .then(result => {
+          const newproducts = result.data.data
+          const datafilter = newproducts.filter(data => data.name.includes(findname))
+          context.commit('SET_PRODUCT', datafilter)
+        })
+        .catch(err => {
+          console.log(err)
+          context.commit('SET_PRODUCT', [])
+        })
+    },
     fetchPending (context, payload) {
       axios({
         method: 'GET',
@@ -87,6 +102,7 @@ export default new Vuex.Store({
         })
     },
     fetchJmlCart (context, payload) {
+      const carttemp = []
       axios({
         method: 'GET',
         url: '/trans/pending',
@@ -96,10 +112,18 @@ export default new Vuex.Store({
         }
       })
         .then(result => {
-          const data = result.data.data.length
+          let data
           let jml = 0
           for (const i in result.data.data) {
             jml += result.data.data[i].price
+            carttemp.push(result.data.data[i].ProductId)
+          }
+          console.log('dataaaaa', carttemp)
+          if (carttemp.length !== 0) {
+            const uniqueid = carttemp.filter((x, i, a) => a.indexOf(x) === i)
+            data = uniqueid.length
+          } else {
+            data = 0
           }
           context.commit('SET_CART', { jmlcart: data, totalprice: jml })
         })

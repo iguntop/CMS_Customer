@@ -182,11 +182,11 @@ export default {
 
 <style>
 @import url(https://fonts.googleapis.com/css?family=Lato:400,300,700);
-body,html {
+/* body,html {
   height:100%;
   margin:0;
   font-family:lato;
-}
+} */
 
 h2 {
   margin-bottom:0px;
